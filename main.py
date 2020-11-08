@@ -30,6 +30,10 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
     line, = ax1.plot([], [], [], color='b', linewidth=0.5, label='$(x_1, y_1, z_1): IC = (0.1, 0., 0.1)$')
     line2, = ax1.plot3D([], [], [], color='r', linewidth=0.5, label='$(x_2, y_2, z_2): IC = (0.1001, 0., 0.1001)$')
+
+    point, = ax1.plot([], [], [], marker='o', color='b', markersize=4)
+    point2, = ax1.plot([], [], [], marker='o', color='r', markersize=4)
+
     ax1.set_facecolor('#E8E6E6')
     ax1.xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
     ax1.yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
@@ -59,8 +63,12 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
         
     # plot x_1 and x_2 values against time
     ax2 = fig.add_subplot(2, 2, 2)
-    line3, = ax2.plot([], [], 'r-', linewidth=0.8)
-    line4, = ax2.plot([], [], 'b-', linewidth=0.8)
+    line3, = ax2.plot([], [], 'b-', linewidth=0.8)
+    line4, = ax2.plot([], [], 'r-', linewidth=0.8)
+
+    point3, = ax2.plot([], [], marker='o', color='b', markersize=4)
+    point4, = ax2.plot([], [], marker='o', color='r', markersize=4)
+
     ax2.set_xlim(t[0], t[len(t)-1])
     ax2.set_ylim(-10, 12.5)
     ax2.set_ylabel('x(t)', fontsize=12)
@@ -70,6 +78,10 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     difference = x_2 - x_1
     ax3 = fig.add_subplot(2, 2, 4)
     line5, = ax3.plot([], [], 'g-', linewidth=0.8)
+
+    point5, = ax3.plot([], [], marker='o', color='g', markersize=4)
+
+
     ax3.set_xlim(t[0], t[len(t)-1])
     ax3.set_ylim(-8, 8)
     ax3.set_ylabel('$|x_2 - x_1|$', fontsize=12)
@@ -79,19 +91,40 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     plt.subplots_adjust(left=0.125, bottom=0.1, right=0.9, top=0.9, wspace=0.2, hspace=0.35)
     
     def update(i):
-        i = 500*i
-        line.set_data(x_1[0:i], y_1[0:i])
-        line.set_3d_properties(z_1[0:i])
-        
-        line2.set_data(x_2[0:i], y_2[0:i])
-        line2.set_3d_properties(z_2[0:i])
-        
-        line3.set_data(t[0:i], x_1[0:i])
-        line4.set_data(t[0:i], x_2[0:i])
+        i = 250*i
+        if i >= 300000:
+            i = 300000-1
 
-        line5.set_data(t[0:i], difference[0:i])
+        xq_1 = x_1[0:i]
+        yq_1 = y_1[0:i]
+        zq_1 = z_1[0:i]
+
+        xq_2 = x_2[0:i]
+        yq_2 = y_2[0:i]
+        zq_2 = z_2[0:i]
+
+        tq = t[0:i]
+
+        line.set_data(xq_1, yq_1)
+        line.set_3d_properties(zq_1)
+        point.set_data(x_1[i], y_1[i])
+        point.set_3d_properties(z_1[i])
         
-        return line, line2, line3, line4, line5,
+        line2.set_data(xq_2, yq_2)
+        line2.set_3d_properties(zq_2)
+        point2.set_data(x_2[i], y_2[i])
+        point2.set_3d_properties(z_2[i])
+
+        line3.set_data(tq, xq_1)
+        point3.set_data(t[i], x_1[i])
+
+        line4.set_data(tq, xq_2)
+        point4.set_data(t[i], x_2[i])
+
+        line5.set_data(tq, difference[0:i])
+        point5.set_data(t[i], difference[i])
+
+        return line, line2, line3, line4, line5, point, point2, point3, point4, point5
     
     ani = FuncAnimation(fig, update, frames=np.size(x_1), interval=0, blit=True)
     
