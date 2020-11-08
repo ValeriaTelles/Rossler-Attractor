@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def rossler(x, y, z, a, b, c):
@@ -33,8 +34,8 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     ax1.zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
     ax1.view_init(elev=23, azim=-131)
     
-    line, = ax1.plot([], [], [], color='blue', linewidth=0.5, label='$(x_1, y_1, z_1): IC = (0.1, 0., 0.1)$')
-    line2, = ax1.plot3D([], [], [], color='red', linewidth=0.5, label='$(x_2, y_2, z_2): IC = (0.1001, 0., 0.1001)$')
+    line, = ax1.plot([], [], [], color='b', linewidth=0.5, label='$(x_1, y_1, z_1): IC = (0.1, 0., 0.1)$')
+    line2, = ax1.plot3D([], [], [], color='r', linewidth=0.5, label='$(x_2, y_2, z_2): IC = (0.1001, 0., 0.1001)$')
     
     # set limits 
     ax1.set_xlim(-10, 15)
@@ -42,9 +43,9 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     ax1.set_zlim(0, 25)
     
     # set axis labels
-    ax1.set_xlabel('X', fontweight='bold', fontsize=12)
-    ax1.set_ylabel('Y', fontweight='bold', fontsize=12)
-    ax1.set_zlabel('Z', fontweight='bold', fontsize=12)
+    ax1.set_xlabel('X', fontsize=12)
+    ax1.set_ylabel('Y', fontsize=12)
+    ax1.set_zlabel('Z', fontsize=12)
     
     # remove tick labels 
     ax1.set_yticklabels([])
@@ -52,39 +53,52 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     ax1.set_zticklabels([])
     
     # legend
-    ax1.legend(loc=(0.2, -0.05), fancybox=True, facecolor='white', edgecolor='black', frameon=True)
+    ax1.legend(loc=(0.2, -0.08), fancybox=True, facecolor='white', edgecolor='black', frameon=True)
     
     # set title
-    ax1.set_title('Phase Space: Trajectories', fontweight='bold', fontsize=14)
-    
-    def update(i):
-        line.set_data(x_1[0:i], y_1[0:i])
-        line.set_3d_properties(z_1[0:i])
-        line2.set_data(x_2[0:i], y_2[0:i])
-        line2.set_3d_properties(z_2[0:i])
+    ax1.set_title('Phase Space: Trajectories', fontsize=14)
         
-        return line, line2,
-    
-    ani = FuncAnimation(fig, update, frames=np.size(x_1), interval=1, blit=False)
-        
-    # plot a_0 values against time
+    # plot x_1 and x_2 values against time
     ax2 = fig.add_subplot(2, 2, 2)
-    ax2.plot(t, x_1, 'r-', linewidth=0.8)
-    ax2.plot(t, x_2, 'b-', linewidth=0.8)
-    ax2.set_ylabel('x(t)', fontweight='bold', fontsize=12)
-    ax2.set_title('Solutions: x_1 (Blue), x_2 (Red)', fontweight='bold', fontsize=14)
+    ax2.set_xlim(t[0], t[len(t)-1])
+    ax2.set_ylim(-10, 12.5)
+    ax2.set_ylabel('x(t)', fontsize=12)
+    ax2.set_title('$Solutions: x_1 (Blue), x_2 (Red)$', fontsize=14)
+    
+    line3, = ax2.plot([], [], 'r-', linewidth=0.8)
+    line4, = ax2.plot([], [], 'b-', linewidth=0.8)
     
     # plot difference (x2-x1)
     difference = x_2 - x_1
     ax3 = fig.add_subplot(2, 2, 4)
-    ax3.plot(t, difference, 'g-', linewidth=0.8)
-    ax3.set_ylabel('|x_2 - x_1|', fontweight='bold', fontsize=12)
-    ax3.set_xlabel('time (s)', fontweight='bold', fontsize=12)
-    ax3.set_title('Negligible Difference', fontweight='bold', fontsize=14)
+    ax3.set_xlim(t[0], t[len(t)-1])
+    ax3.set_ylim(-8, 8)
+    ax3.set_ylabel('$|x_2 - x_1|$', fontsize=12)
+    ax3.set_xlabel('time (s)', fontsize=12)
+    ax3.set_title('Negligible Difference', fontsize=14)
+    
+    line5, = ax3.plot([], [], 'g-', linewidth=0.8)
     
     plt.subplots_adjust(left=0.125, bottom=0.1, right=0.9, top=0.9, wspace=0.2, hspace=0.35)
+    
+    def update(i):
+        line.set_data(x_1[0:i], y_1[0:i])
+        line.set_3d_properties(z_1[0:i])
+        
+        line2.set_data(x_2[0:i], y_2[0:i])
+        line2.set_3d_properties(z_2[0:i])
+        
+        line3.set_data(t[0:i], x_1[0:i])
+        line4.set_data(t[0:i], x_2[0:i])
+
+        line5.set_data(t[0:i], difference[0:i])
+        
+        return line, line2, line3, line4, line5,
+    
+    ani = FuncAnimation(fig, update, frames=np.size(x_1), interval=1, blit=False)
+    
     plt.show()
-    plt.savefig('rossler.png', dpi = 300, facecolor=fig.get_facecolor(), edgecolor='none')
+    # plt.savefig('rossler.png', dpi = 300, facecolor=fig.get_facecolor(), edgecolor='none')
     
         
 def main(): 
