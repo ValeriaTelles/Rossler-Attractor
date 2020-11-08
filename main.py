@@ -59,8 +59,8 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
         
     # plot x_1 and x_2 values against time
     ax2 = fig.add_subplot(2, 2, 2)
-    line3, = ax2.plot([], [], 'r-', linewidth=0.8)
-    line4, = ax2.plot([], [], 'b-', linewidth=0.8)
+    line3, = ax2.plot([], [], 'b-', linewidth=0.8)
+    line4, = ax2.plot([], [], 'r-', linewidth=0.8)
     ax2.set_xlim(t[0], t[len(t)-1])
     ax2.set_ylim(-10, 12.5)
     ax2.set_ylabel('x(t)', fontsize=12)
