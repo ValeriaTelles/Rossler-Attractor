@@ -78,17 +78,17 @@ def plot_rossler(x_1, y_1, z_1, t, x_2, y_2, z_2):
     ax2.set_title('$Solutions: x_1 (Blue), x_2 (Red)$', fontsize=14)
     
     # plot difference (x2-x1)
-    difference = x_2 - x_1
+    difference = np.absolute(x_2 - x_1)
     ax3 = fig.add_subplot(2, 2, 4)
     line5, = ax3.plot([], [], 'g-', linewidth=0.8)
     
     point5, = ax3.plot([], [], marker='o', color='g', markersize=4)
     
     ax3.set_xlim(t[0], t[len(t)-1])
-    ax3.set_ylim(-8, 8)
+    ax3.set_ylim(-0.5, 8)
     ax3.set_ylabel('$|x_2 - x_1|$', fontsize=12)
     ax3.set_xlabel('time (s)', fontsize=12)
-    ax3.set_title('Negligible Difference', fontsize=14)
+    ax3.set_title('$Difference: |x_2 - x_1|$', fontsize=14)
     
     plt.subplots_adjust(left=0.125, bottom=0.1, right=0.9, top=0.9, wspace=0.2, hspace=0.35)
     
