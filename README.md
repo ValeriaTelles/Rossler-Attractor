@@ -29,7 +29,7 @@ This program uses Python 3.7.1 and may need additional packages installed.
 3. Type ```python RosslerAttractor.py``` in your terminal 
 
 ## Awards
-This project was awarded the *Physics Education: Uncertainties Challenge* at the McGill Physics Hackathon 2020. This special prize was awarded to the project that best visualized uncertainty. The intention is to help students visualize and understand uncertainty and how it propagates. 
+This project was awarded the **Physics Education: Uncertainties Challenge** at the McGill Physics Hackathon 2020. This special prize was awarded to the project that best visualized uncertainty. The intention is to help students visualize and understand uncertainty and how it propagates. 
 
 
 ## Output
